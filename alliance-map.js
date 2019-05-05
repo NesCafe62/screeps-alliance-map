@@ -353,7 +353,7 @@ module.exports.update = function() {
 								if (module.config && module.config.background === "Image"){
 									var url = "http://www.leagueofautomatednations.com/obj/" + module.exports.alliances[allianceName].logo;
 
-									newEle.setAttribute("style", `background-image: url("${url}")`);
+									newEle.setAttribute("style", `background-image: url("${url}");
 										background-size: 150px 150px;
 										opacity : 0.2;`);
 
@@ -434,7 +434,7 @@ module.exports.update = function() {
 								if (module.config && module.config.background === "Image"){
 									var url = "http://www.leagueofautomatednations.com/obj/" + module.exports.alliances[allianceName].logo;
 
-									css += `background-image: url("${url}")`;
+									css += `background-image: url("${url}");
 										background-size: 50px 50px;
 										opacity : 0.2;`;
 								}else{
@@ -521,7 +521,7 @@ module.exports.update = function() {
 									if (module.config && module.config.background === "Image"){
 										var url = "http://www.leagueofautomatednations.com/obj/" + module.exports.alliances[allianceName].logo;
 
-										css += `background-image: url("${url}")`;
+										css += `background-image: url("${url}");
 											background-size: 20px 20px;
 											opacity : 0.2;`;
 									}else{
