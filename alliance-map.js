@@ -6,8 +6,7 @@ var module = {
 };
 module._init = function() {
 	/* document.addEventListener(this.name, this._listener.bind(this)); */
-
-	console.log(`init "${this.name}" module`);
+	/* console.log(`init "${this.name}" module`); */
 	this.exports.init.bind(this.exports)();
 }
 
@@ -253,7 +252,7 @@ module.exports.init = function() {
 	/* module.dispatchEvent({event: 'xhttp', url:'http://www.leagueofautomatednations.com/alliances.js'}, function(response) { */
 	module.ajaxRequest('http://www.leagueofautomatednations.com/alliances.js', function(response) {
 		module.exports.alliances = JSON.parse(response.data);
-		console.log('alliances', module.exports.alliances);
+		/* console.log('alliances', module.exports.alliances); */
 
 		module.exports.userToAlliance = {}
 
