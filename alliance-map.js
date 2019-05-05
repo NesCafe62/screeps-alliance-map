@@ -194,7 +194,7 @@ module.getCurrentShard = function(){
 		var pathArray = window.location.href.split('/');
 
 		for (var i = 0; i < pathArray.length; i++) {
-			if (pathArray[i].startsWith("shard")){
+			if (pathArray[i].startsWith("shard")) {
 				return pathArray[i].split('?')[0];
 			}
 		}
@@ -250,7 +250,7 @@ module.exports.colors = [
 
 module.exports.init = function() {
 	/* module.dispatchEvent({event: 'xhttp', url:'http://www.leagueofautomatednations.com/alliances.js'}, function(response) { */
-	module.ajaxRequest('http://www.leagueofautomatednations.com/alliances.js', function(response) {
+	module.ajaxRequest('https://www.leagueofautomatednations.com/alliances.js', function(response) {
 		module.exports.alliances = JSON.parse(response.data);
 		/* console.log('alliances', module.exports.alliances); */
 
