@@ -5,8 +5,9 @@ var module = {
 	exports: {}
 };
 module._init = function() {
-    // document.addEventListener(this.name, this._listener.bind(this));
+    /* document.addEventListener(this.name, this._listener.bind(this)); */
 
+	console.log(`init "${this.name}" module`);
     this.exports.init.bind(this.exports)();
 }
 
@@ -226,7 +227,7 @@ module.ajaxRequest = function(url, callback) {
 			callback({
 				data: req.responseText
 			});
-			// console.log('response', req.responseText);
+			/* console.log('response', req.responseText); */
 		}
 	};
 	req.send();
@@ -249,9 +250,10 @@ module.exports.colors = [
 ];
 
 module.exports.init = function() {
-    // module.dispatchEvent({event: 'xhttp', url:'http://www.leagueofautomatednations.com/alliances.js'}, function(response) {
+    /* module.dispatchEvent({event: 'xhttp', url:'http://www.leagueofautomatednations.com/alliances.js'}, function(response) { */
 	module.ajaxRequest('http://www.leagueofautomatednations.com/alliances.js', function(response) {
         module.exports.alliances = JSON.parse(response.data);
+		console.log('alliances', module.exports.alliances);
 
         module.exports.userToAlliance = {}
 
