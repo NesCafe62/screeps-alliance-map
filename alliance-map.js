@@ -218,7 +218,8 @@ module.getCurrentShard = function(){
 		   }
 	}, cb);
 } */
-module.ajaxRequest = function(url, callback) {
+module.ajaxRequest = window.ajaxRequest;
+/* module.ajaxRequest = function(url, callback) {
 	var req = new XMLHttpRequest();
 	req.open('GET', url, true);
 	req.onreadystatechange = function() {
@@ -226,11 +227,11 @@ module.ajaxRequest = function(url, callback) {
 			callback({
 				data: req.responseText
 			});
-			/* console.log('response', req.responseText); */
+			console.log('response', req.responseText);
 		}
 	};
 	req.send();
-}
+} */
 
 return module;	
 }
@@ -251,7 +252,7 @@ module.exports.colors = [
 module.exports.init = function() {
 	/* module.dispatchEvent({event: 'xhttp', url:'http://www.leagueofautomatednations.com/alliances.js'}, function(response) { */
 	module.ajaxRequest('https://www.leagueofautomatednations.com/alliances.js', function(response) {
-		module.exports.alliances = JSON.parse(response.data);
+		module.exports.alliances = JSON.parse(response);
 		/* console.log('alliances', module.exports.alliances); */
 
 		module.exports.userToAlliance = {}
