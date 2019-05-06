@@ -6,17 +6,10 @@ var module = {
 };
 module._init = function() {
 	/* document.addEventListener(this.name, this._listener.bind(this)); */
-	window.addEventListener("hashchange", function() {
-		const [,page,shardName,roomName] = window.location.hash.split('/');
-		if (page === "map") {
-			if (!module.initialized) {
-				console.log('Initializing module: '+this.name);
-				module.initialized = true;
-				module.exports.init.bind(module.exports)();
-			}
-		}
-	});
-};
+	console.log('Initializing module: '+this.name);
+	/* module.initialized = true; */
+	module.exports.init.bind(module.exports)();
+}
 
 /* module._listener = function (e){
 	var data = JSON.parse(e.detail);
@@ -85,65 +78,65 @@ module.dispatchEvent = function(data, cb){
 	document.dispatchEvent(evt);
 } */
 
-module.getDeepValue = function(obj, path){
-	for (var i=0, path=path.split('.'), len=path.length; i<len; i++){
-		if (obj === undefined || obj[path[i]] === undefined){
+module.getDeepValue = function(obj, path) {
+	for (var i=0, path=path.split('.'), len=path.length; i<len; i++) {
+		if (obj === undefined || obj[path[i]] === undefined) {
 			return undefined;
 		}
 
 		obj = obj[path[i]];
 	};
 	return obj;
-};
+}
 
-module.getScopeData = function(scopeName, objectPath, mustExistPathArr, cb){
+module.getScopeData = function(scopeName, objectPath, mustExistPathArr, cb) {
 	var self = this;
-	this.wait.bind(this)(this.isScopeReady.bind(this, scopeName, objectPath, mustExistPathArr), 50, function(error){
-		if (error){
+	this.wait.bind(this)(this.isScopeReady.bind(this, scopeName, objectPath, mustExistPathArr), 50, function(error) {
+		if (error) {
 			console.error(`condition failed for scope: ${scopeName}, path: ${objectPath}, mustExistArr: ${mustExistPathArr}`)
-		}else{
+		} else {
 			var scope = angular.element(document.getElementsByClassName(`${scopeName} ng-scope`)).scope();
 			cb(self.getDeepValue(scope, objectPath));
 		}
 	});
-};
+}
 
-module.setScopeData = function(scope, objectPath, value, cb){
+module.setScopeData = function(scope, objectPath, value, cb) {
 	var script = document.createElement('script');
 	script.textContent = `angular.element(document.getElementsByClassName('${scope} ng-scope')).scope().${objectPath}=${value};`;
 
 	(document.body || document.head || document.documentElement).appendChild(script);
 	script.remove();
 
-	if(cb){
+	if (cb) {
 	   cb(); 
 	}
-};
+}
 
-module.wait = function(condition, tries, cb){
+module.wait = function(condition, tries, cb) {
 	var self = this;
-	if (condition()){
+	if (condition()) {
 		cb.bind(self)();
-	}else{
-		if (tries > 0){
+	} else {
+		if (tries > 0) {
 			setTimeout(function() { self.wait.bind(self)(condition, tries - 1, cb); }, 100);
-		}else{
+		} else {
 			cb.bind(self)("failed condition");
 		}
 	}
-};
+}
 
-module.isScopeReady = function(scopeName, objectPath, mustExistPathArr){
+module.isScopeReady = function(scopeName, objectPath, mustExistPathArr) {
 	var self = this;
 	var scope = angular.element(document.getElementsByClassName(`${scopeName} ng-scope`)).scope();
 	var object = self.getDeepValue(scope, objectPath);
 	var rootValid = (scope && object && Object.keys(object).length);
 
-	if (mustExistPathArr.length){
+	if (mustExistPathArr.length) {
 
-		if (rootValid){
+		if (rootValid) {
 			let ready = true;
-			mustExistPathArr.forEach(function(path){
+			mustExistPathArr.forEach(function(path) {
 				var obj = self.getDeepValue(scope, path);
 				if (obj === undefined){
 					return ready = false;
@@ -154,13 +147,12 @@ module.isScopeReady = function(scopeName, objectPath, mustExistPathArr){
 				}
 			});
 
-			console.log('scopeIsReady:', ready);
 			return ready;
 		}
 	}
 
 	return rootValid;
-};
+}
 
 /* module.ajaxCall = function(data, cb){
 
@@ -196,10 +188,10 @@ module.isScopeReady = function(scopeName, objectPath, mustExistPathArr){
 	}, cb);
 } */
 
-module.getCurrentShard = function(){
+module.getCurrentShard = function() {
 	var url = window.location.href;
 
-	if (url.indexOf("shard") > -1){
+	if (url.indexOf("shard") > -1) {
 		var pathArray = window.location.href.split('/');
 
 		for (var i = 0; i < pathArray.length; i++) {
@@ -212,9 +204,9 @@ module.getCurrentShard = function(){
 	return ""; 
 };
 
-/* module.sendConsoleCommand = function(command, cb, shard) {
+module.sendConsoleCommand = function(command, cb, shard) {
 
-	if (!shard){
+	if (!shard) {
 		shard = "shard0";
 	}
 
@@ -226,7 +218,8 @@ module.getCurrentShard = function(){
 			   shard: shard
 		   }
 	}, cb);
-} */
+};
+	
 module.ajaxRequest = window.ajaxRequest;
 /* module.ajaxRequest = function(url, callback) {
 	var req = new XMLHttpRequest();
@@ -242,6 +235,11 @@ module.ajaxRequest = window.ajaxRequest;
 	req.send();
 } */
 
+window.addEventListener("hashchange", function() {
+	module.exports.update.bind(module.exports)();
+});
+
+	
 return module;	
 };
 
@@ -262,11 +260,11 @@ module.exports.init = function() {
 	/* module.dispatchEvent({event: 'xhttp', url:'http://www.leagueofautomatednations.com/alliances.js'}, function(response) { */
 	module.ajaxRequest('https://www.leagueofautomatednations.com/alliances.js', function(response) {
 		module.exports.alliances = JSON.parse(response);
-		console.log('alliances:', module.exports.alliances);
+		/* console.log('alliances:', module.exports.alliances); */
 
 		module.exports.userToAlliance = {}
 
-		for(var alliance in module.exports.alliances){
+		for (var alliance in module.exports.alliances) {
 			var members = module.exports.alliances[alliance].members;
 			for(var member in members){
 				var memberName = members[member];
@@ -284,41 +282,40 @@ module.exports.init = function() {
 module.exports.update = function() {
 	module.getScopeData("page-content", "WorldMap", ['WorldMap.displayOptions.layer', 'WorldMap.roomUsers', 'WorldMap.sectors', 'WorldMap.roomStats'], function(worldMap) {
 
-		$('.room-name.ng-binding').unbind("DOMSubtreeModified").bind("DOMSubtreeModified", function(){
+		$('.room-name.ng-binding').unbind("DOMSubtreeModified").bind("DOMSubtreeModified", function() {
 			var roomElement = document.getElementsByClassName('room-name ng-binding')[0];
 			var roomName = roomElement.innerText.replace("Room", "").trim();
 			$("div[id^=display-]").remove();
 
-			if (worldMap.roomStats[roomName] && worldMap.roomStats[roomName].own){
+			if (worldMap.roomStats[roomName] && worldMap.roomStats[roomName].own) {
 				var username = worldMap.roomUsers[worldMap.roomStats[roomName].own.user].username;
 				var allianceName = module.exports.userToAlliance[username];
 
-				if (allianceName){
-					var div = document.createElement("div");
-					div.id = "display-" + roomName;
+				var div = document.createElement("div");
+				div.id = "display-" + roomName;
 
-					var label = document.createElement("label");
-					label.innerText = "Alliance: ";
+				var label = document.createElement("label");
+				label.innerText = (allianceName) ? "Alliance: " : "Not in alliance";
 
+				div.appendChild(label);
+				
+				if (allianceName) {
 					var span = document.createElement("span");
 					span.innerText = allianceName;
 					span.setAttribute("style", 'color:#bbb');
-
-					div.appendChild(label);
 					label.appendChild(span);
-
-					roomElement.parentNode.appendChild(div);
 				}
+				roomElement.parentNode.appendChild(div);
 			}
 		});
 
-		if (worldMap.displayOptions.layer == "owner0" && worldMap.zoom == 3){
+		if (worldMap.displayOptions.layer == "owner0" && worldMap.zoom == 3) {
 			var visibleRoomElements = $('canvas.room-objects.ng-scope');
 
-			for(var eleName in visibleRoomElements){
+			for (var eleName in visibleRoomElements) {
 				var element = visibleRoomElements[eleName];
 
-				if (element.parentNode){
+				if (element.parentNode) {
 					var roomName = element.attributes["app:game-map-room-objects"].value;
 
 
@@ -328,27 +325,27 @@ module.exports.update = function() {
 					var allianceNodes = $(element.parentNode).children('[id^=alliance-]');
 					var hasRoomNode = false;
 
-					if (allianceNodes.length > 0){
-						for(var i = 0; i < allianceNodes.length; i++){
+					if (allianceNodes.length > 0) {
+						for (var i = 0; i < allianceNodes.length; i++) {
 							var roomId = allianceNodes[i].id;
 
-							if (roomId == id){
+							if (roomId == id) {
 								hasRoomNode = true;
-							}else{
+							} else {
 								// need to remove because the map reuse old elements
 								$("#" + roomId).remove();
 							}
 						}
 					}
 
-					if (hasRoomNode == false){
+					if (hasRoomNode == false) {
 
-						if (worldMap.roomStats[roomName] && worldMap.roomStats[roomName].own){
+						if (worldMap.roomStats[roomName] && worldMap.roomStats[roomName].own) {
 
 							var username = worldMap.roomUsers[worldMap.roomStats[roomName].own.user].username;
 							var allianceName = module.exports.userToAlliance[username];
 
-							if (module.exports.userToAlliance[username] && module.exports.alliances[allianceName]){
+							if (module.exports.userToAlliance[username] && module.exports.alliances[allianceName]) {
 								
 								var c = module.exports.hexToRgb(module.exports.alliances[allianceName].color);
 								c.a = 0.2;
@@ -359,14 +356,14 @@ module.exports.update = function() {
 								newEle.id = id;
 								newEle.className = 'room-prohibited';
 
-								if (module.config && module.config.background === "Image"){
+								if (module.config && module.config.background === "Image") {
 									var url = "http://www.leagueofautomatednations.com/obj/" + module.exports.alliances[allianceName].logo;
 
 									newEle.setAttribute("style", `background-image: url("${url}");
 										background-size: 150px 150px;
 										opacity : 0.2;`);
 
-								}else{
+								} else {
 									var c = module.exports.hexToRgb(module.exports.alliances[allianceName].color);
 									c.a = 0.2;
 									newEle.setAttribute("style", `background: rgba(${c.r},${c.g},${c.b},${c.a});`);
@@ -380,12 +377,11 @@ module.exports.update = function() {
 					
 				}
 			}
-		}
-		else if (worldMap.zoom == 2){
+		} else if (worldMap.zoom == 2) {
 
 			var sectors = worldMap.sectors;
 
-			for(var sectorId in worldMap.sectors){
+			for (var sectorId in worldMap.sectors) {
 				var sector = worldMap.sectors[sectorId];
 
 				if (!sector.rooms){
@@ -402,33 +398,33 @@ module.exports.update = function() {
 
 				var correctRooms = canvaElement.siblings(`div[id^=alliance-${sector.firstRoomName}]`);
 
-				if (correctRooms.length == 0){
+				if (correctRooms.length == 0) {
 					var x = 0;
 					var y = 0;
 					var rooms = sector.rooms.split(',');
 
-					for(var i = 0; i < rooms.length; i++){
+					for (var i = 0; i < rooms.length; i++) {
 						
 						var roomName = rooms[i];
 
-						if (i % 4 == 0 && i != 0){
+						if (i % 4 == 0 && i != 0) {
 							y = 1;
 							x += 1;
-						}else{
+						} else {
 							y += 1;
 						}
 
-						if (!worldMap.roomStats[roomName] || !worldMap.roomStats[roomName].own){
+						if (!worldMap.roomStats[roomName] || !worldMap.roomStats[roomName].own) {
 							continue;
 						}
 
 						var username = worldMap.roomUsers[worldMap.roomStats[roomName].own.user].username;
 						var allianceName = module.exports.userToAlliance[username];
 
-						if (module.exports.userToAlliance[username] && module.exports.alliances[allianceName]){
+						if (module.exports.userToAlliance[username] && module.exports.alliances[allianceName]) {
 							var id = "alliance-" + sector.firstRoomName + "-" + roomName;
 
-							if (!document.getElementById(id)){
+							if (!document.getElementById(id)) {
 								
 								var left = (x + 1) * 50 - 50;
 								var top = (y - 1) * 50;
@@ -440,7 +436,7 @@ module.exports.update = function() {
 									left: ${left}px;
 									top: ${top}px;`;
 
-								if (module.config && module.config.background === "Image"){
+								if (module.config && module.config.background === "Image") {
 									var url = "http://www.leagueofautomatednations.com/obj/" + module.exports.alliances[allianceName].logo;
 
 									css += `background-image: url("${url}");
@@ -462,11 +458,11 @@ module.exports.update = function() {
 					}
 				}
 			}
-		} else if (worldMap.zoom == 1){
+		} else if (worldMap.zoom == 1) {
 
 			var sectorMapping = {};
 
-			for(var sectorName in worldMap.sectors){
+			for (var sectorName in worldMap.sectors) {
 				var sector = worldMap.sectors[sectorName];
 
 				sectorMapping[sector.firstRoomName] = sector;
@@ -474,10 +470,10 @@ module.exports.update = function() {
 
 			var sectorElements = $(".map-sector.map-sector--zoom1.ng-scope");
 
-			for(var sectorId in sectorElements){
+			for (var sectorId in sectorElements) {
 				var sectorEle = sectorElements[sectorId];
 
-				if (!sectorEle.style || !sectorEle.style.backgroundImage){
+				if (!sectorEle.style || !sectorEle.style.backgroundImage) {
 					continue;
 				}
 
@@ -485,38 +481,38 @@ module.exports.update = function() {
 
 				var $sectorEle = $(sectorEle);
 				var sector = sectorMapping[firstRoomName];
-				if (sector){
+				if (sector) {
 					$sectorEle.find(`div:not([id^=alliance-1-${firstRoomName}])`).remove();
 
 					var correctRooms = $sectorEle.find(`div[id^=alliance-1-${firstRoomName}]`);
 
-					if (correctRooms.length == 0 && sector.rooms){
+					if (correctRooms.length == 0 && sector.rooms) {
 						var x = 0;
 						var y = 0;
 						var rooms = sector.rooms.split(',');
 
-						for(var i = 0; i < rooms.length; i++){
+						for (var i = 0; i < rooms.length; i++) {
 							
 							var roomName = rooms[i];
 
-							if (i % 10 == 0 && i != 0){
+							if (i % 10 == 0 && i != 0) {
 								y = 1;
 								x += 1;
-							}else{
+							} else {
 								y += 1;
 							}
 
-							if (!worldMap.roomStats[roomName] || !worldMap.roomStats[roomName].own){
+							if (!worldMap.roomStats[roomName] || !worldMap.roomStats[roomName].own) {
 								continue;
 							}
 
 							var username = worldMap.roomUsers[worldMap.roomStats[roomName].own.user].username;
 							var allianceName = module.exports.userToAlliance[username];
 
-							if (module.exports.userToAlliance[username] && module.exports.alliances[allianceName]){
+							if (module.exports.userToAlliance[username] && module.exports.alliances[allianceName]) {
 								var id = "alliance-1-" + sector.firstRoomName + "-" + roomName;
 
-								if (!document.getElementById(id)){
+								if (!document.getElementById(id)) {
 									var left = (x + 1) * 20 - 20;
 									var top = (y - 1) * 20;
 									var newEle = document.createElement("div");
@@ -527,13 +523,13 @@ module.exports.update = function() {
 										left: ${left}px;
 										top: ${top}px;`;
 
-									if (module.config && module.config.background === "Image"){
+									if (module.config && module.config.background === "Image") {
 										var url = "http://www.leagueofautomatednations.com/obj/" + module.exports.alliances[allianceName].logo;
 
 										css += `background-image: url("${url}");
 											background-size: 20px 20px;
 											opacity : 0.2;`;
-									}else{
+									} else {
 										var c = module.exports.hexToRgb(module.exports.alliances[allianceName].color);
 										c.a = 0.3;
 
@@ -551,8 +547,7 @@ module.exports.update = function() {
 
 				}
 			}
-		}
-		else{
+		} else {
 			$("div[id^=alliance-]").remove();
 		}
 
@@ -560,7 +555,7 @@ module.exports.update = function() {
 };
 
 module.exports.hexToRgb = function (hex) {
-	if (!hex){
+	if (!hex) {
 		return {
 			r: 255,
 			g: 255,
