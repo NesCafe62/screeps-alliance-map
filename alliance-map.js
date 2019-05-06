@@ -6,9 +6,10 @@ var module = {
 };
 module._init = function() {
 	/* document.addEventListener(this.name, this._listener.bind(this)); */
-	console.log(`init "${this.name}" module`);
+	/* console.log(`init "${this.name}" module`); */
 	window.addEventListener("hashchange", function() {
 		const [,page,shardName,roomName] = window.location.hash.split('/');
+		console.log(shardName);
 		if (shardName === "map") {
 			if (!module.initialized) {
 				module.initialized = true;
