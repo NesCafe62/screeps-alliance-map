@@ -154,6 +154,7 @@ module.isScopeReady = function(scopeName, objectPath, mustExistPathArr){
 				}
 			});
 
+			console.log('scopeIsReady:', ready);
 			return ready;
 		}
 	}
@@ -261,7 +262,7 @@ module.exports.init = function() {
 	/* module.dispatchEvent({event: 'xhttp', url:'http://www.leagueofautomatednations.com/alliances.js'}, function(response) { */
 	module.ajaxRequest('https://www.leagueofautomatednations.com/alliances.js', function(response) {
 		module.exports.alliances = JSON.parse(response);
-		/* console.log('alliances', module.exports.alliances); */
+		console.log('alliances:', module.exports.alliances);
 
 		module.exports.userToAlliance = {}
 
