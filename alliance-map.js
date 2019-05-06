@@ -6,12 +6,11 @@ var module = {
 };
 module._init = function() {
 	/* document.addEventListener(this.name, this._listener.bind(this)); */
-	/* console.log(`init "${this.name}" module`); */
 	window.addEventListener("hashchange", function() {
 		const [,page,shardName,roomName] = window.location.hash.split('/');
-		console.log(shardName);
-		if (shardName === "map") {
+		if (page === "map") {
 			if (!module.initialized) {
+				console.log('Initializing module: '+this.name);
 				module.initialized = true;
 				module.exports.init.bind(module.exports)();
 			}
