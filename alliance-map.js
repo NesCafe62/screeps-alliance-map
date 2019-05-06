@@ -16,7 +16,7 @@ module._init = function() {
 			}
 		}
 	};
-}
+};
 
 /* module._listener = function (e){
 	var data = JSON.parse(e.detail);
@@ -94,7 +94,7 @@ module.getDeepValue = function(obj, path){
 		obj = obj[path[i]];
 	};
 	return obj;
-}
+};
 
 module.getScopeData = function(scopeName, objectPath, mustExistPathArr, cb){
 	var self = this;
@@ -106,7 +106,7 @@ module.getScopeData = function(scopeName, objectPath, mustExistPathArr, cb){
 			cb(self.getDeepValue(scope, objectPath));
 		}
 	});
-}
+};
 
 module.setScopeData = function(scope, objectPath, value, cb){
 	var script = document.createElement('script');
@@ -118,7 +118,7 @@ module.setScopeData = function(scope, objectPath, value, cb){
 	if(cb){
 	   cb(); 
 	}
-}
+};
 
 module.wait = function(condition, tries, cb){
 	var self = this;
@@ -131,7 +131,7 @@ module.wait = function(condition, tries, cb){
 			cb.bind(self)("failed condition");
 		}
 	}
-}
+};
 
 module.isScopeReady = function(scopeName, objectPath, mustExistPathArr){
 	var self = this;
@@ -159,7 +159,7 @@ module.isScopeReady = function(scopeName, objectPath, mustExistPathArr){
 	}
 
 	return rootValid;
-}
+};
 
 /* module.ajaxCall = function(data, cb){
 
@@ -209,7 +209,7 @@ module.getCurrentShard = function(){
 	}
 
 	return ""; 
-}
+};
 
 /* module.sendConsoleCommand = function(command, cb, shard) {
 
@@ -242,7 +242,7 @@ module.ajaxRequest = window.ajaxRequest;
 } */
 
 return module;	
-}
+};
 
 
 var module = createModule('alliance-map');
@@ -278,7 +278,7 @@ module.exports.init = function() {
 
 		module.exports.update();
 	});
-}
+};
 
 module.exports.update = function() {
 	module.getScopeData("page-content", "WorldMap", ['WorldMap.displayOptions.layer', 'WorldMap.roomUsers', 'WorldMap.sectors', 'WorldMap.roomStats'], function(worldMap) {
@@ -556,7 +556,7 @@ module.exports.update = function() {
 		}
 
 	});
-}
+};
 
 module.exports.hexToRgb = function (hex) {
 	if (!hex){
@@ -564,7 +564,7 @@ module.exports.hexToRgb = function (hex) {
 			r: 255,
 			g: 255,
 			b: 255,
-		}
+		};
 	}
 
 	var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
@@ -578,6 +578,6 @@ module.exports.hexToRgb = function (hex) {
 		g: parseInt(result[2], 16),
 		b: parseInt(result[3], 16)
 	} : null;
-}
+};
 
 module._init();
