@@ -15,7 +15,7 @@ module._init = function() {
 				module.exports.init.bind(module.exports)();
 			}
 		}
-	};
+	});
 };
 
 /* module._listener = function (e){
