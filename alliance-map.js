@@ -7,7 +7,15 @@ var module = {
 module._init = function() {
 	/* document.addEventListener(this.name, this._listener.bind(this)); */
 	/* console.log(`init "${this.name}" module`); */
-	this.exports.init.bind(this.exports)();
+	window.addEventListener("hashchange", function() {
+		const [,page,shardName,roomName] = window.location.hash.split('/');
+		if (shardName === "map") {
+			if (!module.initialized) {
+				module.initialized = true;
+				module.exports.init.bind(module.exports)();
+			}
+		}
+	}
 }
 
 /* module._listener = function (e){
