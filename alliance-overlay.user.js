@@ -260,21 +260,35 @@ function addSectorAllianceOverlay() {
     let mapContainerElem = angular.element(".map-container");
     let scope = mapContainerElem.scope();
 
-    let deferRecalculation = function () {
+    let deferRecalculation = function (immediate = false) {
         // remove alliance logos during redraws
         // $('.alliance-logo').remove(); // [-] removed
+        // [+] added
+        if (!immediate) {
+            $('.alliance-logo').remove();
+        }
+        // <<
 
         pendingRedraws++;
         setTimeout(() => {
             pendingRedraws--;
             if (pendingRedraws === 0) {
-                $('.alliance-logo').remove(); // [+] added
+                // [+] added
+                if (immediate) {
+                    $('.alliance-logo').remove();
+                }
+                // <<
                 recalculateAllianceOverlay();
             }
         }, 500);
     }
     scope.$on("mapSectorsRecalced", deferRecalculation);
-    scope.$on("mapStatsUpdated", deferRecalculation);
+    // scope.$on("mapStatsUpdated", deferRecalculation); // [-] removed
+    // [+] added
+    scope.$on("mapStatsUpdated", function() {
+        deferRecalculation(true);
+    });
+    // <<
 }
 
 function addAllianceColumnToLeaderboard() {
