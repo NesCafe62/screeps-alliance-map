@@ -88,6 +88,9 @@ function exposeAllianceDataForAngular() {
         worldMap.allianceData = allianceData;
         worldMap.userAlliance = userAlliance;
 
+        // [+] added
+        overlayDisplayed = true;
+        // <<
         recalculateAllianceOverlay();
     });
 
@@ -251,9 +254,6 @@ function recalculateAllianceOverlay() {
             }
         }
     }
-    // [+] added
-    overlayDisplayed = true;
-    // <<
 }
 
 let pendingRedraws = 0;
@@ -286,6 +286,7 @@ function addSectorAllianceOverlay() {
                 if (overlayDisplayed) {
                     $('.alliance-logo').remove();
                 }
+                overlayDisplayed = true;
                 // <<
                 recalculateAllianceOverlay();
             }
