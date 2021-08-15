@@ -77,8 +77,8 @@ function declareLoAN(){
                 document.allianceData = JSON.parse(response.responseText);
                 document.userAlliance = {};
 
-                for (let allianceKey in allianceData) {
-                    let alliance = allianceData[allianceKey];
+                for (let allianceKey in document.allianceData) {
+                    let alliance = document.allianceData[allianceKey];
                     for (let userIndex in alliance.members) {
                         let userName = alliance.members[userIndex];
                         document.userAlliance[userName] = allianceKey;
@@ -386,7 +386,7 @@ window.executeLoAN = function(){
     if(!document.LoANDeclared)declareLoAN();
     window.ensureAllianceData();
 
-    function injectScriptTag(url){
+    /* function injectScriptTag(url){
         return new Promise(function(good, bad){
             const xhr = new XMLHttpRequest();
             xhr.open('GET', url, true);
@@ -407,7 +407,26 @@ window.executeLoAN = function(){
             };
             xhr.send();
         });
-    };
+    }; */
+    
+    function injectScriptTag(url){
+        return new Promise(function(resolve, reject){
+            GM_xmlhttpRequest({
+				method: 'GET',
+				url: url,
+				onload: function(response) {
+					var script = document.createElement('script');
+					script.innerHTML = response.responseText; // .replace(/GM_xmlhttpRequest/g, 'override_xmlhttpRequest');
+					console.log('resp', response.responseText);
+					document.head.appendChild(script);
+                    resolve({status: response.status, responseText: response.responseText});
+				},
+                onerror: function(response) {
+                    reject({status: response.status, responseText: response.responseText});
+                }
+			});
+        });
+    }
     
     injectScriptTag("https://raw.githubusercontent.com/Esryok/screeps-browser-ext/master/screeps-browser-core.js").then(
     (()=>injectScriptTag("https://raw.githubusercontent.com/davidmerfield/randomColor/master/randomColor.js"))).then(
