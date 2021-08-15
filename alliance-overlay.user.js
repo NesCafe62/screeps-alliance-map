@@ -251,6 +251,9 @@ function recalculateAllianceOverlay() {
             }
         }
     }
+    // [+] added
+    overlayDisplayed = true;
+    // <<
 }
 
 let pendingRedraws = 0;
@@ -283,7 +286,6 @@ function addSectorAllianceOverlay() {
                 if (overlayDisplayed) {
                     $('.alliance-logo').remove();
                 }
-                overlayDisplayed = true;
                 // <<
                 recalculateAllianceOverlay();
             }
