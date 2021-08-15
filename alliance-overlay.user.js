@@ -285,7 +285,7 @@ function addSectorAllianceOverlay() {
         let firstSector = worldMap.sectors[0];
         if (firstSector) {
             if (firstSector.left === lastMapLeft && firstSector.top === lastMapTop && worldMap.zoom === lastZoom) {
-                console.log('deferClear = true');
+                // console.log('deferClear = true');
                 deferClear = true;
             }
             lastZoom = worldMap.zoom;
@@ -294,7 +294,7 @@ function addSectorAllianceOverlay() {
         }
         
         if (overlayDisplayed && !deferClear) {
-            console.log('clear1');
+            // console.log('clear1');
             $('.alliance-logo').remove();
             overlayDisplayed = false;
         }
@@ -306,7 +306,7 @@ function addSectorAllianceOverlay() {
             if (pendingRedraws === 0) {
                 // [+] added
                 if (overlayDisplayed) {
-                    console.log('clear2');
+                    // console.log('clear2');
                     $('.alliance-logo').remove();
                 }
                 overlayDisplayed = true;
@@ -315,8 +315,10 @@ function addSectorAllianceOverlay() {
             }
         }, 500);
     }
-    scope.$on("mapSectorsRecalced", function() { console.log('mapSectorsRecalced'); deferRecalculation(); });
-    scope.$on("mapStatsUpdated", function() { console.log('mapStatsUpdated'); deferRecalculation(); });
+    scope.$on("mapSectorsRecalced", deferRecalculation);
+    scope.$on("mapStatsUpdated", deferRecalculation);
+    /* scope.$on("mapSectorsRecalced", function() { console.log('mapSectorsRecalced'); deferRecalculation(); });
+    scope.$on("mapStatsUpdated", function() { console.log('mapStatsUpdated'); deferRecalculation(); }); */
 }
 
 function addAllianceColumnToLeaderboard() {
