@@ -249,6 +249,12 @@ function recalculateAllianceOverlay() {
 }
 
 let pendingRedraws = 0;
+// [+] added
+let overlayDisplayed = false;
+let lastMapLeft = 0;
+let lastMapTop = 0;
+let lastZoom = 0;
+// <<
 function addSectorAllianceOverlay() {
     addStyle("\
         .alliance-logo { position: absolute; z-index: 2; opacity: 0.4 }\
@@ -260,12 +266,26 @@ function addSectorAllianceOverlay() {
     let mapContainerElem = angular.element(".map-container");
     let scope = mapContainerElem.scope();
 
-    let deferRecalculation = function (immediate = false) {
+    let deferRecalculation = function () {
         // remove alliance logos during redraws
         // $('.alliance-logo').remove(); // [-] removed
         // [+] added
-        if (!immediate) {
+        let deferClear = false;
+        
+        let worldMap = scope.WorldMap;
+        let firstSector = worldMap.sectors[0];
+        if (firstSector) {
+            if (firstSector.left === lastMapLeft && firstSector.left === lastMapTop && worldMap.zoom === lastZoom) {
+                deferClear = true;
+            }
+            lastZoom = worldMap.zoom;
+            lastMapLeft = firstSector.left;
+            lastMapTop = firstSector.top;
+        }
+        
+        if (overlayDisplayed && !deferClear) {
             $('.alliance-logo').remove();
+            overlayDisplayed = false;
         }
         // <<
 
@@ -274,21 +294,17 @@ function addSectorAllianceOverlay() {
             pendingRedraws--;
             if (pendingRedraws === 0) {
                 // [+] added
-                if (immediate) {
+                if (overlayDisplayed) {
                     $('.alliance-logo').remove();
                 }
+                overlayDisplayed = true;
                 // <<
                 recalculateAllianceOverlay();
             }
         }, 500);
     }
     scope.$on("mapSectorsRecalced", deferRecalculation);
-    // scope.$on("mapStatsUpdated", deferRecalculation); // [-] removed
-    // [+] added
-    scope.$on("mapStatsUpdated", function() {
-        deferRecalculation(true);
-    });
-    // <<
+    scope.$on("mapStatsUpdated", deferRecalculation);
 }
 
 function addAllianceColumnToLeaderboard() {
