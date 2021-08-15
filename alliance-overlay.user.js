@@ -17,6 +17,10 @@
 
 const loanBaseUrl = "http://www.leagueofautomatednations.com";
 
+// [+] added
+let overlayDisplayed = false;
+// <<
+
 let allianceData;
 let userAlliance;
 function getAllianceLogo(allianceKey) {
@@ -84,6 +88,9 @@ function exposeAllianceDataForAngular() {
         worldMap.allianceData = allianceData;
         worldMap.userAlliance = userAlliance;
 
+        // [+] added
+        overlayDisplayed = true;
+        // <<
         recalculateAllianceOverlay();
     });
 
@@ -128,6 +135,9 @@ function bindAllianceSetting() {
             ensureAllianceData(exposeAllianceDataForAngular);
         } else {
             $('.alliance-logo').remove();
+            // [+] added
+            overlayDisplayed = false;
+            // <<
         }
     };
 
@@ -250,7 +260,6 @@ function recalculateAllianceOverlay() {
 
 let pendingRedraws = 0;
 // [+] added
-let overlayDisplayed = false;
 let lastMapLeft = 0;
 let lastMapTop = 0;
 let lastZoom = 0;
@@ -275,21 +284,17 @@ function addSectorAllianceOverlay() {
         let worldMap = scope.WorldMap;
         let firstSector = worldMap.sectors[0];
         if (firstSector) {
-            if (firstSector.left === lastMapLeft && firstSector.left === lastMapTop && worldMap.zoom === lastZoom) {
-                console.log('deferClear = true');
+            if (firstSector.left === lastMapLeft && firstSector.top === lastMapTop && worldMap.zoom === lastZoom) {
                 deferClear = true;
             }
             lastZoom = worldMap.zoom;
             lastMapLeft = firstSector.left;
             lastMapTop = firstSector.top;
-            console.log('update', {lastZoom, lastMapLeft, lastMapTop});
         }
         
         if (overlayDisplayed && !deferClear) {
-            console.log('clearing');
             $('.alliance-logo').remove();
             overlayDisplayed = false;
-            console.log('overlayDisplayed = false');
         }
         // <<
 
@@ -299,18 +304,16 @@ function addSectorAllianceOverlay() {
             if (pendingRedraws === 0) {
                 // [+] added
                 if (overlayDisplayed) {
-                    console.log('clearing2');
                     $('.alliance-logo').remove();
                 }
                 overlayDisplayed = true;
-                console.log('overlayDisplayed = true');
                 // <<
                 recalculateAllianceOverlay();
             }
         }, 500);
     }
-    scope.$on("mapSectorsRecalced", function() { console.log('mapSectorsRecalced'); deferRecalculation(); });
-    scope.$on("mapStatsUpdated", function() { console.log('mapStatsUpdated'); deferRecalculation(); });
+    scope.$on("mapSectorsRecalced", deferRecalculation);
+    scope.$on("mapStatsUpdated", deferRecalculation);
 }
 
 function addAllianceColumnToLeaderboard() {
