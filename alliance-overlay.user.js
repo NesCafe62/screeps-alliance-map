@@ -66,6 +66,7 @@ function ensureAllianceData(callback) {
                 let alliance = allianceData[allianceKey];
                 for (let userIndex in alliance.members) {
                     let userName = alliance.members[userIndex];
+                    console.log({userName: userName, allianceKey: allianceKey}); // temp
                     userAlliance[userName] = allianceKey;
                 }
             }
@@ -146,10 +147,10 @@ function bindAllianceSetting() {
 
         let userName = worldMap.roomUsers[userId].username;
         let allianceKey = worldMap.userAlliance[userName];
-        console.log({userId: userId, userName: userName, allianceKey: allianceKey});
+        // console.log({userId: userId, userName: userName, allianceKey: allianceKey});
         if (!allianceKey) return "None";
 
-        console.log({userId: userId, userName: userName, allianceKey: allianceKey, allianceData: worldMap.allianceData[allianceKey]}); // temp
+        console.log(worldMap.allianceData[allianceKey]);
 
         return worldMap.allianceData[allianceKey].name;
     };
