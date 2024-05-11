@@ -21,10 +21,11 @@ const loanBaseUrl = "http://www.leagueofautomatednations.com";
 let overlayDisplayed = false;
 // <<
 
+let currentShard;
 let allianceData;
 let userAlliance;
 function getAllianceLogo(allianceKey) {
-    let data = allianceData[allianceKey];
+    let data = allianceData[currentShard][allianceKey];
     if (data) {
         return loanBaseUrl + "/obj/" + data.logo;
     }
@@ -33,7 +34,7 @@ function getAllianceLogo(allianceKey) {
 let colorMap = {};
 function getAllianceColor(allianceKey) {
     if (!colorMap[allianceKey]) {
-        let seed = allianceData[allianceKey].name;
+        let seed = allianceData[currentShard][allianceKey].name;
         let [hue,sat,lum] = randomColor({
             hue: "random",
             luminosity: "light",
@@ -54,27 +55,45 @@ function ensureAllianceData(callback) {
         if (callback) callback();
         return;
     }
+	
+	const shards = ['shard0', 'shard1', 'shard2', 'shard3'];
 
-    GM_xmlhttpRequest({
-        method: "GET",
-        url: (loanBaseUrl + "/alliances.js"),
-        onload: function(response) {
-            allianceData = JSON.parse(response.responseText);
-            userAlliance = {};
+	let loadedShards = 0;
+	let _allianceData = {};
+	let _userAlliance = {};
+	
+	function checkAllLoaded() {
+		if (loadedShards === shards.length) {
+			allianceData = _allianceData;
+			userAlliance = _userAlliance;
+			
+			console.log("Alliance data loaded from LOAN.");
+			if (callback) callback();
+		}
+	}
 
-            for (let allianceKey in allianceData) {
-                let alliance = allianceData[allianceKey];
-                for (let userIndex in alliance.members) {
-                    let userName = alliance.members[userIndex];
-                    console.log({userName: userName, allianceKey: allianceKey}); // temp
-                    userAlliance[userName] = allianceKey;
-                }
-            }
+	for (let shard of shards) {
+		GM_xmlhttpRequest({
+			method: "GET",
+			url: (loanBaseUrl + "/map/" + shard + "/alliances.js"),
+			onload: function(response) {
+				const data = JSON.parse(response.responseText);
 
-            console.log("Alliance data loaded from LOAN.");
-            if (callback) callback();
-        }
-    });
+				for (let allianceKey in data) {
+					let alliance = data[allianceKey];
+					for (let userIndex in alliance.members) {
+						let userName = alliance.members[userIndex];
+						console.log({userName: userName, allianceKey: allianceKey}); // temp
+						_userAlliance[userName] = allianceKey;
+					}
+				}
+				
+				_allianceData[shard] = data;
+				loadedShards++;
+				checkAllLoaded();
+			}
+		});
+	}
 }
 
 // Stuff references to the alliance data in the world map object. Not clear whether this is actually doing useful things.
@@ -95,10 +114,12 @@ function exposeAllianceDataForAngular() {
         recalculateAllianceOverlay();
     });
 
-    for (let allianceKey in allianceData) {
-        addStyle(".alliance-" + allianceKey + " { background-color: " + getAllianceColor(allianceKey) + " }");
-        addStyle(".alliance-logo-3.alliance-" + allianceKey + " { background-image: url('" + getAllianceLogo(allianceKey) + "') }");
-    }
+	for (let shard in allianceData) {
+		for (let allianceKey in allianceData[shard]) {
+			addStyle(".alliance-" + allianceKey + " { background-color: " + getAllianceColor(allianceKey) + " }");
+			addStyle(".alliance-logo-3.alliance-" + allianceKey + " { background-image: url('" + getAllianceLogo(allianceKey) + "') }");
+		}
+	}
 }
 
 // inject a new CSS style
@@ -147,12 +168,9 @@ function bindAllianceSetting() {
 
         let userName = worldMap.roomUsers[userId].username;
         let allianceKey = worldMap.userAlliance[userName];
-        // console.log({userId: userId, userName: userName, allianceKey: allianceKey});
         if (!allianceKey) return "None";
 
-        console.log(worldMap.allianceData[allianceKey]);
-
-        return worldMap.allianceData[allianceKey].name;
+        return worldMap.allianceData[currentShard][allianceKey].name;
     };
 
     if (alliancesEnabled) {
@@ -342,7 +360,7 @@ function addAllianceColumnToLeaderboard() {
                         let userId = leaderboard.list[i - 1].user;
                         let userName = leaderboard.users[userId].username;
                         let allianceKey = userAlliance[userName];
-                        let allianceName = (allianceKey ? allianceData[allianceKey].name : "");
+                        let allianceName = (allianceKey ? allianceData[currentShard][allianceKey].name : "");
                         
                         $("<td class='alliance-leaderboard'>" + allianceName +" </td>").insertAfter(playerElem);
                     }
@@ -371,7 +389,12 @@ $(document).ready(() => {
     });
 
     ScreepsAdapter.onHashChange((hash) => {
-        var match = hash.match(/#!\/(.+?)\//);
+		let match = hash.match('/#!\/map\/shard(\d)/');
+		if (match) {
+			currentShard = 'shard' + match[1];
+		}
+		
+        match = hash.match(/#!\/(.+?)\//);
         if (match && match.length > 1 && match[1] === "rank") {
             let app = angular.element(document.body);
             let search = app.injector().get("$location").search();
