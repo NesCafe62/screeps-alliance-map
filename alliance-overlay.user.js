@@ -429,7 +429,6 @@ $(document).ready(() => {
 
     ScreepsAdapter.onHashChange((hash) => {
         let match = hash.match(/#!\/map\/shard(\d)/);
-        console.log('hash.match', match); // temp
         if (match) {
             currentShard = 'shard' + match[1];
         }
