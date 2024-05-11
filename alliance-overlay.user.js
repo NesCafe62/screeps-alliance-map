@@ -74,6 +74,8 @@ function ensureAllianceData(callback) {
         if (loadedShards === shards.length) {
             allianceData = _allianceData;
             userAlliance = _userAlliance;
+            console.log(allianceData); // temp
+            console.log(userAlliance); // temp
             
             console.log("Alliance data loaded from LOAN.");
             if (callback) callback();
