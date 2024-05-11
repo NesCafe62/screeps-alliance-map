@@ -144,11 +144,14 @@ function bindAllianceSetting() {
     worldMap.getAllianceName = function (userId) {
         if (!worldMap.userAlliance) return "Loading...";
 
-        let userName = this.roomUsers[userId].username;
+        let userName = worldMap.roomUsers[userId].username;
         let allianceKey = worldMap.userAlliance[userName];
+        console.log({userId: userId, userName: userName, allianceKey: allianceKey});
         if (!allianceKey) return "None";
 
-        return this.allianceData[allianceKey].name;
+        console.log({userId: userId, userName: userName, allianceKey: allianceKey, allianceData: worldMap.allianceData[allianceKey]}); // temp
+
+        return worldMap.allianceData[allianceKey].name;
     };
 
     if (alliancesEnabled) {
