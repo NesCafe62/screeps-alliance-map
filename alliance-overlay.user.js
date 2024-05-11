@@ -177,6 +177,7 @@ function bindAllianceSetting() {
 
         let userName = worldMap.roomUsers[userId].username;
         let allianceKey = worldMap.userAlliance[userName];
+        console.log(currentShard); // temp
         if (
             !allianceKey || !worldMap.allianceData[currentShard] ||
             !worldMap.allianceData[currentShard][allianceKey]
