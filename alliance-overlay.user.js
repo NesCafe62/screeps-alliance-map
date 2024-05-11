@@ -71,11 +71,11 @@ function ensureAllianceData(callback) {
     let _userAlliance = {};
     
     function checkAllLoaded() {
-        if (loadedShards === shards.length) {
+        if (loadedShards === shards.length + 1 /* + 1 temp */) {
             allianceData = _allianceData;
             userAlliance = _userAlliance;
-            console.log(allianceData);
-            console.log(userAlliance);
+            // console.log(allianceData);
+            // console.log(userAlliance);
             
             console.log("Alliance data loaded from LOAN.");
             if (callback) callback();
@@ -95,37 +95,38 @@ function ensureAllianceData(callback) {
                 }
             }
                 
-            _allianceData['shard0'] = data;
+            /* _allianceData['shard0'] = data;
             _allianceData['shard1'] = data;
             _allianceData['shard2'] = data;
-            _allianceData['shard3'] = data;
-            loadedShards = 4;
+            _allianceData['shard3'] = data; */
+            loadedShards++;
             checkAllLoaded();
         }
     });
     // <<
 
-    /* for (let shard of shards) {
+    for (let shard of shards) {
         GM_xmlhttpRequest({
             method: "GET",
             url: (loanBaseUrl + "/map/" + shard + "/alliances.js"),
             onload: function(response) {
                 const data = JSON.parse(response.responseText);
 
-                for (let allianceKey in data) {
+                // temporary disabled:
+                /* for (let allianceKey in data) {
                     let alliance = data[allianceKey];
                     for (let userIndex in alliance.members) {
                         let userName = alliance.members[userIndex];
                         _userAlliance[userName] = allianceKey;
                     }
-                }
+                } */
                 
                 _allianceData[shard] = data;
                 loadedShards++;
                 checkAllLoaded();
             }
         });
-    } */
+    }
 }
 
 // Stuff references to the alliance data in the world map object. Not clear whether this is actually doing useful things.
