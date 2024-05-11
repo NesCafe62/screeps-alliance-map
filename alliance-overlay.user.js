@@ -25,7 +25,7 @@ let currentShard;
 let allianceData;
 let userAlliance;
 function getAllianceLogo(allianceKey) {
-    let data = allianceData[currentShard][allianceKey];
+    let data = allianceData[currentShard] ? allianceData[currentShard][allianceKey] : undefined;
     if (data) {
         return loanBaseUrl + "/obj/" + data.logo;
     }
@@ -33,7 +33,7 @@ function getAllianceLogo(allianceKey) {
 
 let colorMap = {};
 function getAllianceColor(allianceKey) {
-    if (!colorMap[allianceKey]) {
+    if (!colorMap[allianceKey] && allianceData[currentShard] && allianceData[currentShard][allianceKey]) {
         let seed = allianceData[currentShard][allianceKey].name;
         let [hue,sat,lum] = randomColor({
             hue: "random",
@@ -63,7 +63,7 @@ function ensureAllianceData(callback) {
         return;
     }
     
-    // updateCurrentShard();
+    updateCurrentShard();
     const shards = ['shard0', 'shard1', 'shard2', 'shard3'];
 
     let loadedShards = 0;
