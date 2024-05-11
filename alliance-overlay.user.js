@@ -50,8 +50,7 @@ function getAllianceColor(allianceKey) {
 }
 
 function updateCurrentShard() {
-    let match = window.location.hash.match('/#!\/map\/shard(\d)/');
-    console.log(match); // temp
+    let match = window.location.hash.match(/#!\/map\/shard(\d)/);
     if (match) {
         currentShard = 'shard' + match[1];
     }
@@ -64,7 +63,7 @@ function ensureAllianceData(callback) {
         return;
     }
     
-    updateCurrentShard();
+    // updateCurrentShard();
     const shards = ['shard0', 'shard1', 'shard2', 'shard3'];
 
     let loadedShards = 0;
@@ -397,7 +396,7 @@ $(document).ready(() => {
     });
 
     ScreepsAdapter.onHashChange((hash) => {
-        let match = hash.match('/#!\/map\/shard(\d)/');
+        let match = hash.match(/#!\/map\/shard(\d)/);
         if (match) {
             currentShard = 'shard' + match[1];
         }
