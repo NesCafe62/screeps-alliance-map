@@ -90,9 +90,7 @@ function ensureAllianceData(callback) {
             const data = JSON.parse(response.responseText);
 
             for (let allianceKey in data) {
-                let alliance = data[allianceKey];
-                for (let userIndex in alliance.members) {
-                    let userName = alliance.members[userIndex];
+                for (let userName of data[allianceKey]) {
                     _userAlliance[userName] = allianceKey;
                 }
             }
