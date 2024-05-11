@@ -52,7 +52,7 @@ function getAllianceColor(allianceKey) {
 function updateCurrentShard() {
     let match = window.location.hash.match(/#!\/map\/shard(\d)/);
     if (match) {
-        currentShard = 'shard' + match[2];
+        currentShard = 'shard' + match[1];
     }
 }
 
@@ -63,7 +63,7 @@ function ensureAllianceData(callback) {
         return;
     }
     
-    updateCurrentShard();
+    // updateCurrentShard();
     const shards = ['shard0', 'shard1', 'shard2', 'shard3'];
 
     let loadedShards = 0;
@@ -74,8 +74,8 @@ function ensureAllianceData(callback) {
         if (loadedShards === shards.length) {
             allianceData = _allianceData;
             userAlliance = _userAlliance;
-            console.log(allianceData); // temp
-            console.log(userAlliance); // temp
+            // console.log(allianceData);
+            // console.log(userAlliance);
             
             console.log("Alliance data loaded from LOAN.");
             if (callback) callback();
@@ -177,7 +177,6 @@ function bindAllianceSetting() {
 
         let userName = worldMap.roomUsers[userId].username;
         let allianceKey = worldMap.userAlliance[userName];
-        console.log(currentShard); // temp
         if (
             !allianceKey || !worldMap.allianceData[currentShard] ||
             !worldMap.allianceData[currentShard][allianceKey]
@@ -405,8 +404,9 @@ $(document).ready(() => {
 
     ScreepsAdapter.onHashChange((hash) => {
         let match = hash.match(/#!\/map\/shard(\d)/);
+        console.log('hash.match', match); // temp
         if (match) {
-            currentShard = 'shard' + match[2];
+            currentShard = 'shard' + match[1];
         }
         
         match = hash.match(/#!\/(.+?)\//);
