@@ -74,8 +74,8 @@ function ensureAllianceData(callback) {
         if (loadedShards === shards.length) {
             allianceData = _allianceData;
             userAlliance = _userAlliance;
-            // console.log(allianceData);
-            // console.log(userAlliance);
+            console.log(allianceData);
+            console.log(userAlliance);
             
             console.log("Alliance data loaded from LOAN.");
             if (callback) callback();
@@ -85,7 +85,7 @@ function ensureAllianceData(callback) {
     // >> temporary loading updated alliances.js because loan has outdated data for now
     GM_xmlhttpRequest({
         method: "GET",
-        url: 'https://raw.githubusercontent.com/NesCafe62/screeps-alliance-map/master/alliances.js',
+        url: 'http://raw.githubusercontent.com/NesCafe62/screeps-alliance-map/master/alliances.js',
         onload: function(response) {
             const data = JSON.parse(response.responseText);
 
