@@ -82,7 +82,32 @@ function ensureAllianceData(callback) {
         }
     }
 
-    for (let shard of shards) {
+    // >> temporary loading updated alliances.js because loan has outdated data for now
+    GM_xmlhttpRequest({
+        method: "GET",
+        url: 'https://raw.githubusercontent.com/NesCafe62/screeps-alliance-map/master/alliances.js',
+        onload: function(response) {
+            const data = JSON.parse(response.responseText);
+
+            for (let allianceKey in data) {
+                let alliance = data[allianceKey];
+                for (let userIndex in alliance.members) {
+                    let userName = alliance.members[userIndex];
+                    _userAlliance[userName] = allianceKey;
+                }
+            }
+                
+            _allianceData['shard0'] = data;
+            _allianceData['shard1'] = data;
+            _allianceData['shard2'] = data;
+            _allianceData['shard3'] = data;
+            loadedShards = 4;
+            checkAllLoaded();
+        }
+    });
+    // <<
+
+    /* for (let shard of shards) {
         GM_xmlhttpRequest({
             method: "GET",
             url: (loanBaseUrl + "/map/" + shard + "/alliances.js"),
@@ -102,7 +127,7 @@ function ensureAllianceData(callback) {
                 checkAllLoaded();
             }
         });
-    }
+    } */
 }
 
 // Stuff references to the alliance data in the world map object. Not clear whether this is actually doing useful things.
