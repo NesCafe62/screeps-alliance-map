@@ -49,51 +49,59 @@ function getAllianceColor(allianceKey) {
     return colorMap[allianceKey];
 }
 
+function updateCurrentShard() {
+    let match = window.location.hash.match('/#!\/map\/shard(\d)/');
+    console.log(match); // temp
+    if (match) {
+        currentShard = 'shard' + match[1];
+    }
+}
+
 // query for alliance data from the LOAN site
 function ensureAllianceData(callback) {
     if (allianceData) {
         if (callback) callback();
         return;
     }
-	
-	const shards = ['shard0', 'shard1', 'shard2', 'shard3'];
+    
+    updateCurrentShard();
+    const shards = ['shard0', 'shard1', 'shard2', 'shard3'];
 
-	let loadedShards = 0;
-	let _allianceData = {};
-	let _userAlliance = {};
-	
-	function checkAllLoaded() {
-		if (loadedShards === shards.length) {
-			allianceData = _allianceData;
-			userAlliance = _userAlliance;
-			
-			console.log("Alliance data loaded from LOAN.");
-			if (callback) callback();
-		}
-	}
+    let loadedShards = 0;
+    let _allianceData = {};
+    let _userAlliance = {};
+    
+    function checkAllLoaded() {
+        if (loadedShards === shards.length) {
+            allianceData = _allianceData;
+            userAlliance = _userAlliance;
+            
+            console.log("Alliance data loaded from LOAN.");
+            if (callback) callback();
+        }
+    }
 
-	for (let shard of shards) {
-		GM_xmlhttpRequest({
-			method: "GET",
-			url: (loanBaseUrl + "/map/" + shard + "/alliances.js"),
-			onload: function(response) {
-				const data = JSON.parse(response.responseText);
+    for (let shard of shards) {
+        GM_xmlhttpRequest({
+            method: "GET",
+            url: (loanBaseUrl + "/map/" + shard + "/alliances.js"),
+            onload: function(response) {
+                const data = JSON.parse(response.responseText);
 
-				for (let allianceKey in data) {
-					let alliance = data[allianceKey];
-					for (let userIndex in alliance.members) {
-						let userName = alliance.members[userIndex];
-						console.log({userName: userName, allianceKey: allianceKey}); // temp
-						_userAlliance[userName] = allianceKey;
-					}
-				}
-				
-				_allianceData[shard] = data;
-				loadedShards++;
-				checkAllLoaded();
-			}
-		});
-	}
+                for (let allianceKey in data) {
+                    let alliance = data[allianceKey];
+                    for (let userIndex in alliance.members) {
+                        let userName = alliance.members[userIndex];
+                        _userAlliance[userName] = allianceKey;
+                    }
+                }
+                
+                _allianceData[shard] = data;
+                loadedShards++;
+                checkAllLoaded();
+            }
+        });
+    }
 }
 
 // Stuff references to the alliance data in the world map object. Not clear whether this is actually doing useful things.
@@ -114,12 +122,12 @@ function exposeAllianceDataForAngular() {
         recalculateAllianceOverlay();
     });
 
-	for (let shard in allianceData) {
-		for (let allianceKey in allianceData[shard]) {
-			addStyle(".alliance-" + allianceKey + " { background-color: " + getAllianceColor(allianceKey) + " }");
-			addStyle(".alliance-logo-3.alliance-" + allianceKey + " { background-image: url('" + getAllianceLogo(allianceKey) + "') }");
-		}
-	}
+    for (let shard in allianceData) {
+        for (let allianceKey in allianceData[shard]) {
+            addStyle(".alliance-" + allianceKey + " { background-color: " + getAllianceColor(allianceKey) + " }");
+            addStyle(".alliance-logo-3.alliance-" + allianceKey + " { background-image: url('" + getAllianceLogo(allianceKey) + "') }");
+        }
+    }
 }
 
 // inject a new CSS style
@@ -389,11 +397,11 @@ $(document).ready(() => {
     });
 
     ScreepsAdapter.onHashChange((hash) => {
-		let match = hash.match('/#!\/map\/shard(\d)/');
-		if (match) {
-			currentShard = 'shard' + match[1];
-		}
-		
+        let match = hash.match('/#!\/map\/shard(\d)/');
+        if (match) {
+            currentShard = 'shard' + match[1];
+        }
+        
         match = hash.match(/#!\/(.+?)\//);
         if (match && match.length > 1 && match[1] === "rank") {
             let app = angular.element(document.body);
