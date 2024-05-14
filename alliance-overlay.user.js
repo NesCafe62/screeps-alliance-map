@@ -13,6 +13,7 @@
 // @require      http://www.leagueofautomatednations.com/static/js/vendor/randomColor.js
 // @require      https://github.com/Esryok/screeps-browser-ext/raw/master/screeps-browser-core.js
 // @connect      www.leagueofautomatednations.com
+// @connect      https://raw.githubusercontent.com/NesCafe62/screeps-alliance-map/master/alliances.js
 // ==/UserScript==
 
 const loanBaseUrl = "http://www.leagueofautomatednations.com";
@@ -85,7 +86,7 @@ function ensureAllianceData(callback) {
     // >> temporary loading updated alliances.js because loan has outdated data for now
     GM_xmlhttpRequest({
         method: "GET",
-        url: 'http://raw.githubusercontent.com/NesCafe62/screeps-alliance-map/master/alliances.js',
+        url: 'https://raw.githubusercontent.com/NesCafe62/screeps-alliance-map/master/alliances.js',
         onload: function(response) {
             const data = JSON.parse(response.responseText);
 
