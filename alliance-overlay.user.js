@@ -13,7 +13,7 @@
 // @require      http://www.leagueofautomatednations.com/static/js/vendor/randomColor.js
 // @require      https://github.com/Esryok/screeps-browser-ext/raw/master/screeps-browser-core.js
 // @connect      www.leagueofautomatednations.com
-// @connect      https://raw.githubusercontent.com/NesCafe62/screeps-alliance-map/master/alliances.js
+// @connect      raw.githubusercontent.com
 // ==/UserScript==
 
 const loanBaseUrl = "http://www.leagueofautomatednations.com";
