@@ -1,5 +1,5 @@
 {
-    "SSS": ["Shylo132", "MerlinMan5", "Starb", "ThomasCui", "Arigilos", "PlainCucumber25", "Kuruma", "DollarAkshay", "Pankpanther", "U-238", "Winnduu", "Salieri", "ChuChuChu"],
+    "SSS": ["Shylo132", "MerlinMan5", "Starb", "ThomasCui", "Arigilos", "PlainCucumber25", "Kuruma", "DollarAkshay", "Pankpanther", "U-238", "Winnduu", "Salieri", "ChuChuChu", "Diesel13", "Penzz"],
     "FAG": ["Baldinater", "Doc360", "luketheduke"],
     "TheAngels": ["Samdalf", "WhiteHalmos", "Somotaw", "Nevrdid", "bugeyemonsters", "Sander", "Namahanna", "Tsungen", "Evanito", "JetBalsa", "Tynian"],
     "Vikings": ["JOURLOY", "Kartinka"],
