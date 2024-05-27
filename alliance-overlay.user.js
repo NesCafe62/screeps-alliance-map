@@ -36,15 +36,22 @@ let colorMap = {};
 function getAllianceColor(allianceKey) {
     if (!colorMap[allianceKey] && allianceData[currentShard] && allianceData[currentShard][allianceKey]) {
         let seed = allianceData[currentShard][allianceKey].name;
-        let [hue,sat,lum] = randomColor({
-            hue: "random",
-            luminosity: "light",
-            seed,
-            format: "hslArray"
-        });
+        if (seed === '_ENEMY') {
+            colorMap[allianceKey] = `hsl(6,91.59%,44.055%)`;
+        } else {
+            if (seed === 'YP') {
+                seed = '_ENEMY'; // just light blue color
+            }
+            let [hue,sat,lum] = randomColor({
+                hue: "random",
+                luminosity: "light",
+                seed,
+                format: "hslArray"
+            });
 
-        // the canvas opacity means the light color set has bad costrast: reduce luminosity to improve
-        colorMap[allianceKey] = `hsl(${hue},${sat}%,${lum/2}%)`;
+            // the canvas opacity means the light color set has bad costrast: reduce luminosity to improve
+            colorMap[allianceKey] = `hsl(${hue},${sat}%,${lum/2}%)`;
+        }
     }
 
     return colorMap[allianceKey];
@@ -121,16 +128,16 @@ function ensureAllianceData(callback) {
                         _userAlliance[userName] = allianceKey;
                     }
                 } */
-				
-				data._ENEMIES = {
-					"discord_url": null,
-					"color": "#000000",
-					"logo": "",
-					"id": null,
-					"members": [],
-					"name": "Enemy",
-					"abbreviation": "Enemy"
-				};
+                
+                data._ENEMIES = {
+                    "discord_url": null,
+                    "color": "#000000",
+                    "logo": "",
+                    "id": null,
+                    "members": [],
+                    "name": "Enemy",
+                    "abbreviation": "Enemy"
+                };
                 
                 _allianceData[shard] = data;
                 loadedShards++;
