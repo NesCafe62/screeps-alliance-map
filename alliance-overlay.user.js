@@ -36,11 +36,11 @@ let colorMap = {};
 function getAllianceColor(allianceKey) {
     if (!colorMap[allianceKey] && allianceData[currentShard] && allianceData[currentShard][allianceKey]) {
         let seed = allianceData[currentShard][allianceKey].name;
-        if (seed === '_ENEMY') {
+        if (seed === 'Enemy') {
             colorMap[allianceKey] = `hsl(6,91.59%,44.055%)`;
         } else {
-            if (seed === 'YP') {
-                seed = '_ENEMY'; // just light blue color
+            if (seed === 'Ypsilon Pact') {
+                seed = 'Enemy'; // just light blue color
             }
             let [hue,sat,lum] = randomColor({
                 hue: "random",
