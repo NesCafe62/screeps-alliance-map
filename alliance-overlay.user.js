@@ -121,6 +121,16 @@ function ensureAllianceData(callback) {
                         _userAlliance[userName] = allianceKey;
                     }
                 } */
+				
+				data._ENEMIES = {
+					"discord_url": null,
+					"color": "#000000",
+					"logo": "",
+					"id": null,
+					"members": [],
+					"name": "Enemy",
+					"abbreviation": "Enemy"
+				};
                 
                 _allianceData[shard] = data;
                 loadedShards++;
