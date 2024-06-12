@@ -26,6 +26,9 @@ let currentShard;
 let allianceData;
 let userAlliance;
 function getAllianceLogo(allianceKey) {
+    if (allianceKey === 'SSS') {
+        return 'https://raw.githubusercontent.com/NesCafe62/screeps-alliance-map/master/SSS-logo_200.gif';
+    }
     let data = allianceData[currentShard] ? allianceData[currentShard][allianceKey] : undefined;
     if (data) {
         return loanBaseUrl + "/obj/" + data.logo;
@@ -137,6 +140,16 @@ function ensureAllianceData(callback) {
                     "members": [],
                     "name": "Enemy",
                     "abbreviation": "Enemy"
+                };
+
+                data.SSS = {
+                    "discord_url": null,
+                    "color": "#000000",
+                    "logo": "",
+                    "id": null,
+                    "members": [],
+                    "name": "SSS",
+                    "abbreviation": "Screeps Scripts Syndicates"
                 };
                 
                 _allianceData[shard] = data;
