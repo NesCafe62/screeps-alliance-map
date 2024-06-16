@@ -39,6 +39,9 @@ let colorMap = {};
 function getAllianceColor(allianceKey) {
     if (!colorMap[allianceKey] && allianceData[currentShard] && allianceData[currentShard][allianceKey]) {
         let seed = allianceData[currentShard][allianceKey].name;
+        if (seed === 'SSS-A') {
+            seed = 'SSS';
+        }
         if (seed === 'Enemy') {
             colorMap[allianceKey] = `hsl(6,91.59%,44.055%)`;
         } else {
