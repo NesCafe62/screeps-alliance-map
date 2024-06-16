@@ -1,6 +1,7 @@
 {
     "_ENEMIES": ["lp136", "Player94", "publicVoid", "JoroxTheAncient", "BALCKJUNWIN", "Bobbywang_"],
-    "SSS": ["Shylo132", "MerlinMan5", "Starb", "ThomasCui", "Arigilos", "PlainCucumber25", "Kuruma", "DollarAkshay", "Pankpanther", "U-238", "Winnduu", "Salieri", "ChuChuChu", "Diesel13", "Penzz"],
+    "SSS": ["Shylo132", "MerlinMan5", "ThomasCui", "Arigilos", "PlainCucumber25", "U-238", "Winnduu", "Salieri", "Loop_Cat", "Acquawo"],
+    "SSS-A": ["Starb", "DollarAkshay", "Pankpanther", "ChuChuChu", "Diesel13", "Penzz", "tidusfox9", "_KFC_", "Virus_377b2d"],
     "FAG": ["Baldinater", "Doc360", "luketheduke"],
     "TheAngels": ["Samdalf", "WhiteHalmos", "Somotaw", "Nevrdid", "bugeyemonsters", "Sander", "Namahanna", "Tsungen", "Evanito", "JetBalsa", "Tynian"],
     "Vikings": ["JOURLOY", "Kartinka"],
