@@ -148,8 +148,18 @@ function ensureAllianceData(callback) {
                     "logo": "",
                     "id": null,
                     "members": [],
-                    "name": "SSS",
-                    "abbreviation": "Screeps Scripts Syndicates"
+                    "name": "Screeps Scripts Syndicates",
+                    "abbreviation": "SSS"
+                };
+
+                data['SSS-A'] = {
+                    "discord_url": null,
+                    "color": "#000000",
+                    "logo": "",
+                    "id": null,
+                    "members": [],
+                    "name": "SSS Associate",
+                    "abbreviation": "SSS-A"
                 };
                 
                 _allianceData[shard] = data;
