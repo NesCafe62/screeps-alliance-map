@@ -26,7 +26,7 @@ let currentShard;
 let allianceData;
 let userAlliance;
 function getAllianceLogo(allianceKey) {
-    if (allianceKey === 'SSS') {
+    if (allianceKey === 'SSS' || allianceKey === 'SSS-A') {
         return 'https://raw.githubusercontent.com/NesCafe62/screeps-alliance-map/master/SSS-logo_200.gif';
     }
     let data = allianceData[currentShard] ? allianceData[currentShard][allianceKey] : undefined;
