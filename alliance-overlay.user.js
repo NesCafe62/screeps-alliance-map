@@ -26,7 +26,10 @@ let currentShard;
 let allianceData;
 let userAlliance;
 function getAllianceLogo(allianceKey) {
-    if (allianceKey === 'Screeps Scripts Syndicates' || allianceKey === 'SSS Associate') {
+    if (allianceKey === 'SSS-A') {
+        allianceKey = 'SSS';
+    }
+    if (allianceKey === 'SSS') {
         return 'https://raw.githubusercontent.com/NesCafe62/screeps-alliance-map/master/SSS-logo_200.gif';
     }
     let data = allianceData[currentShard] ? allianceData[currentShard][allianceKey] : undefined;
@@ -37,11 +40,11 @@ function getAllianceLogo(allianceKey) {
 
 let colorMap = {};
 function getAllianceColor(allianceKey) {
+    if (allianceKey === 'SSS-A') {
+        allianceKey = 'SSS';
+    }
     if (!colorMap[allianceKey] && allianceData[currentShard] && allianceData[currentShard][allianceKey]) {
         let seed = allianceData[currentShard][allianceKey].name;
-        if (seed === 'SSS Associate') {
-            seed = 'Screeps Scripts Syndicates';
-        }
         if (seed === 'Enemy') {
             colorMap[allianceKey] = `hsl(6,91.59%,44.055%)`;
         } else {
